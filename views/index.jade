@@ -1,0 +1,181 @@
+div(class="presentation")
+  div(class="slides")
+    div(class="slide")
+      section
+        h1 CoffeeScript
+    div(class="slide")
+      section
+        h4
+          | こんにちわ、
+          a(href="http://twitter.com/#!/ise0615") ise0615
+          | です。
+        a(href="http://twitter.com/#!/ise0615")
+          img(src="https://si0.twimg.com/profile_images/1425531359/y1p4714JFgQbXWbk3xWeDAZQ_2Xf63NvVD0EBKIOOsczy777c2b3WruhNX0IPmLBXcUuhbA2eM5YIk01EOWh6YEXQ_reasonably_small.jpg")
+        p
+          a(href="http://www.ise-web.com/introduce/") プロフィール
+    div(class="slide")
+      section
+        h4 今更ながら
+        h4 CoffeeScriptに興味湧いてた俺
+        h4 纏めておくことにしました。
+    div(class="slide")
+      section
+        h4 この資料は、
+        h4 Node.js & CoffeeScript & MongoDB
+        h4 で作成しています。
+    div(class="slide")
+      section
+        h4 せっかくNode.jsを利用するので、
+        h4 付箋でメモ共有機能を追加しています。
+        h4 ダブルクリックしてみてねｗ
+    div(class="slide")
+      section
+        h4 CoffeeScriptってなんだ？
+    div(class="slide")
+      section
+        h4 少ないコード
+        h4 &
+        h4 機能の強化
+    div(class="slide")
+      section(class="left")
+        h4 Exsample1
+        div(class="code")
+          pre(class="prettyprint linenums")
+            | $(function() {
+            |     $('body').html('hello');
+            | });
+    div(class="slide")
+      section
+        h4 ; 要らない
+        div(class="code")
+          pre(class="prettyprint linenums")
+            | $(function() {
+            |     $('body').html('hello')
+            | })
+    div(class="slide")
+      section
+        h4 () 要らない
+        div(class="code")
+          pre(class="prettyprint linenums")
+            | $function() {
+            |     $('body').html 'hello'
+            | }
+    div(class="slide")
+      section
+        h4 {} 要らない
+        div(class="code")
+          pre(class="prettyprint linenums")
+            | $function()
+            |     $('body').html 'hello'
+    div(class="slide")
+      section
+        h4 function() は ｰ>
+        div(class="code")
+          pre(class="prettyprint linenums")
+            | $ ->
+            |     $('body').html 'hello'
+    div(class="slide")
+      section(class="left")
+        h4 Exsample2
+        div(class="code")
+          pre(class="prettyprint linenums")
+            | $("div").click(function(event) {
+            |     $(this).css({
+            |         color: "red",
+            |         fontSize: "14px"
+            |     });
+            | });
+    div(class="slide")
+      section
+        h4 ; () {} は要らない
+        div(class="code")
+          pre(class="prettyprint linenums")
+            | $("div").click function(event)
+            |     $(this).css
+            |         color: "red",
+            |         fontSize: "14px"
+    div(class="slide")
+      section
+        h4 , は要らない
+        div(class="code")
+          pre(class="prettyprint linenums")
+            | $("div").click function(event)
+            |     $(this).css
+            |         color: "red"
+            |         fontSize: "14px"
+    div(class="slide")
+      section
+        h4 function(args) は (args) ->
+        div(class="code")
+          pre(class="prettyprint linenums")
+            | $("div").click (event) ->
+            |     $(this).css
+            |         color: "red"
+            |         fontSize: "14px"
+    div(class="slide")
+      section
+        h4 this  は @
+        div(class="code")
+          pre(class="prettyprint linenums")
+            | $("div").click (event) ->
+            |     $(@).css
+            |         color: "red"
+            |         fontSize: "14px"
+    div(class="slide")
+      section
+        h4 機能の強化
+    div(class="slide")
+      section
+        h4 変数に var は要らない
+        div(class="code center")
+          pre(class="prettyprint")
+            | version = 1.7
+    div(class="slide")
+      section
+        h4 グローバル変数は明示的に
+        div(class="code center")
+          pre(class="prettyprint")
+            | windows.title = 'CoffeeScript'
+    div(class="slide")
+      section
+        h4 ""の中では \#{式}が使える
+        div(class="code center")
+          pre(class="prettyprint")
+            | "\#{version + 1}"
+    div(class="slide")
+      section
+        h4 曖昧な == と != は使えない
+        div(class="code center")
+          pre(class="prettyprint")
+            | ○ 1 === true
+            | × 1 == true
+    div(class="slide")
+      section
+        h4  ＝＝＝ は is とも書ける
+        div(class="code center")
+          pre(class="prettyprint")
+            | 1 is true
+    div(class="slide")
+      section
+        h4 他にもこんなのがある
+        div(class="code center")
+          pre(class="prettyprint")
+            | !==   →  isnt
+            | !        →  not
+            | &&   →  and
+            | ||       →  or
+    div(class="slide")
+      section
+        h4 まとめ
+    div(class="slide")
+      section
+        h4 CoffeeScriptを利用すると
+        h4 短く書けて便利機能が利用できる。
+        h4 そして何より
+        h4 コードに一貫性が生まれる！！
+    div(class="slide")
+      section
+        h4 Thank You!
+  div(class="counter") 0
+  div(class="operation")
+
