@@ -1,10 +1,10 @@
 
-■ Node.js&CoffeeScript&MongoDBを利用したスライドショーアプリ
+■ Node.js & CoffeeScript & MongoDBを利用したHTML5スライドショー
 
 環境構築
 
 ・ビルドを実行する
-make build
+make all
 
 ・サーバーを起動する
 make run

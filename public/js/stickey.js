@@ -2,8 +2,8 @@ var socket = io.connect();
 var slides = document.getElementsByClassName("slides")[0];
 var operation = document.getElementsByClassName("operation")[0];
 socket.on('loaded', function (data) {
-		labelLoad(data);
-		});
+	labelLoad(data);
+});
 socket.on('created', function (data) {
 	var newLabel = document.createElement("DIV");
         var message;
@@ -92,39 +92,39 @@ socket.on('text edited', function(data){
 	}
 	label.appendChild(xButton);
 
- 	labelText.innerHTML = data.message;
+	labelText.innerHTML = data.message;
 	label.appendChild(labelText);
-        });
+});
 socket.on('deleted', function(data){
-          var label = document.getElementById(data.id);
-          var node = label.parentNode;
-          node.removeChild(label);
-        });
+	var label = document.getElementById(data.id);
+	var node = label.parentNode;
+	node.removeChild(label);
+});
 socket.on('updated', function(data){
-          var label = document.getElementById(data.id);
-          label.style.left = data.x + "px";
-          label.style.top = data.y + "px";
-        });
+	var label = document.getElementById(data.id);
+	label.style.left = data.x + "px";
+	label.style.top = data.y + "px";
+});
 window.onload = function (){
 	slides.addEventListener("dblclick", addLabel, false);
 //	showhide();
-        }
+}
 function showhide () {
 	var hideButton = document.createElement("INPUT");
-        hideButton.type = "button";
-        hideButton.value = "hide";
+		hideButton.type = "button";
+		hideButton.value = "hide";
 	hideButton.addEventListener("click", hideAll, false);
-        hideButton.onclick = function () {
-          hideAll(this);
-          return false;
-        };
+	hideButton.onclick = function () {
+		hideAll(this);
+		return false;
+	};
 	operation.appendChild(hideButton);
 }
 function addLabel (event) {
 	//新しいラベルの追加
 	slides.removeEventListener("dblclick", addLabel, false);
 	var layerX = event.layerX;
-        var layerY = event.layerY;
+	var layerY = event.layerY;
 	socket.json.emit('create', {x: layerX, y: layerY, slideno: currentSlideNo-1});
 }
 
@@ -153,9 +153,8 @@ function onDrag (evt, item) {
 	}
 
 	function mouseup (){
-       		slides.removeEventListener("mousemove", mousemove, false);
+		slides.removeEventListener("mousemove", mousemove, false);
 	}
-
 }
 
 function reEdit (evt, oDiv) {
@@ -236,6 +235,7 @@ function reEdit (evt, oDiv) {
 
 	inputText.focus();
 }
+
 function labelLoad (data) {
 	//ラベルのロード
 
@@ -271,7 +271,7 @@ function labelLoad (data) {
 }
 
 function escapeHTML(str) {
-    return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 
@@ -283,22 +283,23 @@ function labelDelete(id) {
 
 function labelSave () {
 	//ラベルのセーブ
+}
 
-}
 function showAll(event) {
-  var labels = document.getElementsByClassName("label");
-  console.log(labels);
-  for (var i=0; i<labels.length; i++) {
-    console.log(labels[i]);
-    labels[i].style.display='';
-  }
+	var labels = document.getElementsByClassName("label");
+	console.log(labels);
+	for (var i=0; i<labels.length; i++) {
+		console.log(labels[i]);
+		labels[i].style.display='';
+	}
 }
+
 function hideAll(event) {
-  var labels = document.getElementsByClassName("label");
-  console.log(labels.length);
-  for (var i=0; i<labels.length; i++) {
-    console.log(labels[i]);
-    labels[i].style.display='none';
-  }
+	var labels = document.getElementsByClassName("label");
+	console.log(labels.length);
+	for (var i=0; i<labels.length; i++) {
+		console.log(labels[i]);
+		labels[i].style.display='none';
+	}
 }
 

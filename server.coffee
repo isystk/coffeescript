@@ -12,13 +12,13 @@ app = module.exports = express.createServer()
 counter = 0
 mongoUri = 'mongodb://127.0.0.1/nodeslide'
 Schema = mongoose.Schema
-commentSchema = new Schema({
-    slideno :Number,
-    message :String,
-    slideKey:String,
-    x       :Number,
+commentSchema = new Schema
+    slideno :Number
+    message :String
+    slideKey:String
+    x       :Number
     y       :Number
-})
+
 slideKey = 'default'
 socketIds = []
 slideMap = []

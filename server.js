@@ -17,7 +17,7 @@ app = module.exports = express.createServer();
 
 counter = 0;
 
-mongoUri = 'mongodb://127.0.0.1/coffeeslide';
+mongoUri = 'mongodb://127.0.0.1/nodeslide';
 
 Schema = mongoose.Schema;
 

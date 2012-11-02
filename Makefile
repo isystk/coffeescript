@@ -1,11 +1,11 @@
-all: build compile
+all: install build
 
-build:
+install:
 	npm install
 
-SRC_DIR = ./server.coffee
-compile:
-	./node_modules/coffee-script/bin/coffee -b -c $(SRC_DIR)
+TARGET := $(shell find . -type f -name '*.coffee')
+build: $(TARGET)
+	./node_modules/coffee-script/bin/coffee -b -c $^
 	#coffee -w -b -o $(LIB_DIR) -c $(SRC_DIR)
 
 MAIN_JS = ./server.js
