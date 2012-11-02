@@ -1,3 +1,4 @@
+# 現在表示しているページ番号を取得します
 getCurrentSlide = ->
   url = location.href
 
@@ -26,7 +27,6 @@ str2array = (s) ->
 
 trim = (str) ->
   return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
-
 
 addClass = (node, classStr) ->
   classStr = str2array classStr
@@ -57,7 +57,6 @@ getSlideEl = (slideNo) ->
 
 changeSlideElClass = (slideNo, className) ->
   el = getSlideEl slideNo
-
   if el
     removeClass el, 'far-past past current future far-future'
     addClass el, className
@@ -70,20 +69,25 @@ updateSlideClasses = ->
   changeSlideElClass currentSlideNo + 1, 'future'
   changeSlideElClass currentSlideNo + 2, 'far-future'
 
+# 次ページ処理
 nextSlide = ->
   if currentSlideNo < slides.length
     currentSlideNo++
   updateSlideClasses()
 
+# 前ページ処理
 prevSlide = ->
   if currentSlideNo > 1
     currentSlideNo--
   updateSlideClasses()
 
+# キーボード押下処理
 handleBodyKeyDown = (event) ->
   switch event.keyCode
+    # 左矢印押下時
     when 37
       prevSlide()
+    # 右矢印押下時
     when 39
       nextSlide()
 
@@ -92,14 +96,14 @@ showAll = ->
   labels = document.getElementsByClassName 'label'
   console.log labels
   for label in labels
-    label.style.display=''
+    label.style.display = ''
 
 # コメントを非表示にします。
 hideAll = ->
   labels = document.getElementsByClassName 'label'
   console.log labels
   for label in labels
-    label.style.display='none'
+    label.style.display = 'none'
 
 # ソースコードをハイライト表示
 ( ->

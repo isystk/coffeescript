@@ -15,20 +15,20 @@ socket.on 'counter', (data) ->
 
 socket.on 'created', (data) ->
   if data.slideKey == getSlideId()
-    newLabel = document.createElement('DIV')
+    newLabel = document.createElement 'div'
     newLabel.id = data.id
     newLabel.className = 'label'
     newLabel.style.left = data.x + 'px'
     newLabel.style.top = data.y + 'px'
     # 入力フォームの用意
-    inputForm = document.createElement('FORM')
+    inputForm = document.createElement 'form'
 
-    inputText = document.createElement('TEXTAREA')
+    inputText = document.createElement 'textarea'
     inputText.style.cols = '10'
     inputText.style.rows = '3'
     inputForm.appendChild inputText
 
-    okButton = document.createElement 'INPUT'
+    okButton = document.createElement 'input'
     okButton.type = 'button'
     okButton.value = 'ok'
     okButton.onclick = ->
@@ -36,7 +36,7 @@ socket.on 'created', (data) ->
     inputForm.appendChild okButton
     # OKされたらテキストを表示し、フォームを消す
     writeText = ->
-      labelText = document.createElement 'SPAN'
+      labelText = document.createElement 'span'
       str = inputText.value
       str = escapeHTML str
       htmlstr = str.replace(/(\n|\r)+/g, '<br />')
@@ -56,7 +56,7 @@ socket.on 'created', (data) ->
       document.addEventListener 'keydown', handleBodyKeyDown, false
 
     # 編集をキャンセルした場合の処理
-    cancelButton = document.createElement 'INPUT'
+    cancelButton = document.createElement 'input'
     cancelButton.type = 'button'
     cancelButton.value = 'x'
     cancelButton.onclick = ->
@@ -74,12 +74,12 @@ socket.on 'created', (data) ->
 
 socket.on 'created by other', (data) ->
   if data.slideKey == getSlideId()
-    newLabel = document.createElement('DIV')
+    newLabel = document.createElement 'div'
     newLabel.id = data.id
     newLabel.className = 'label'
     newLabel.style.left = data.x + 'px'
     newLabel.style.top = data.y + 'px'
-    labelText = document.createElement('SPAN')
+    labelText = document.createElement 'span'
     labelText.innerHTML = 'someone writing....'
     newLabel.appendChild(labelText)
     newLabel.onmousedown = (evt) ->
@@ -94,13 +94,13 @@ socket.on 'created by other', (data) ->
 
 socket.on 'text edited', (data) ->
   if data.slideKey == getSlideId()
-    label = document.getElementById(data.id)
-    xButtonLabel = label.getElementsByTagName('A')[0]
-    labelText = label.getElementsByTagName('SPAN')[0]
+    label = document.getElementById data.id
+    xButtonLabel = label.getElementsByTagName('a')[0]
+    labelText = label.getElementsByTagName('span')[0]
     if xButtonLabel
       label.removeChild xButtonLabel
     label.removeChild labelText
-    xButton = document.createElement 'A'
+    xButton = document.createElement 'a'
     xButton.href = '#'
     xButton.innerHTML = '[x]'
     xButton.onclick = ->
@@ -136,40 +136,40 @@ window.onload = ->
   createOperationMenu()
 
 createOperationMenu = ->
-  showButton = document.createElement 'BUTTON'
+  showButton = document.createElement 'button'
   showButton.type = 'button'
   showButton.innerHTML = 'show'
   # hideButton.addEventListener 'click', hideAll, false
   showButton.onclick = ->
     showAll()
 
-  hideButton = document.createElement 'BUTTON'
+  hideButton = document.createElement 'button'
   hideButton.type = 'button'
   hideButton.innerHTML = 'hide'
   # hideButton.addEventListener 'click', hideAll, false
   hideButton.onclick = ->
     hideAll()
 
-  previousButton = document.createElement 'BUTTON'
+  previousButton = document.createElement 'button'
   previousButton.type = 'button'
   previousButton.innerHTML = '< previous'
   # hideButton.addEventListener 'click', hideAll, false
   previousButton.onclick = ->
     prevSlide()
 
-  nextButton = document.createElement 'BUTTON'
+  nextButton = document.createElement 'button'
   nextButton.type = 'button'
   nextButton.innerHTML = 'next >'
   # hideButton.addEventListener 'click', hideAll, false
   nextButton.onclick = ->
     nextSlide()
-  colorSelector = document.createElement 'SELECT'
-  yellowOption = document.createElement 'OPTION'
+  colorSelector = document.createElement 'select'
+  yellowOption = document.createElement 'option'
   yellowOption.value = 'yellow'
   yellowOption.innerHTML = 'yellow'
   yellowOption.onselect = ->
     console.log 'yellow'
-  redOption = document.createElement 'OPTION'
+  redOption = document.createElement 'option'
   redOption.value = 'red'
   redOption.innerHTML = 'red'
   colorSelector.appendChild yellowOption
@@ -228,16 +228,16 @@ reEdit = (evt, oDiv) ->
   oDiv.onmousedown = -> {}
 
   # フォームを用意し、既に書いてあるテキストを代入
-  inputForm = document.createElement('FORM')
+  inputForm = document.createElement('form')
 
-  inputText = document.createElement('TEXTAREA')
+  inputText = document.createElement('textarea')
   inputText.style.cols = '10'
   inputText.style.rows = '3'
   str = str.replace(/<br\b\/>|<br>/g, '\n')
   inputText.value = str
   inputForm.appendChild inputText
 
-  okButton = document.createElement 'INPUT'
+  okButton = document.createElement 'input'
   okButton.type = 'button'
   okButton.value = 'ok'
   okButton.onclick = -> writeText()
@@ -246,7 +246,7 @@ reEdit = (evt, oDiv) ->
   # OKされると内容を表示
   writeText = ->
 
-    labelText = document.createElement('SPAN')
+    labelText = document.createElement('span')
     str = inputText.value
     str = str.replace(/(\n|\r)+/g, '<br />')
     labelText.innerHTML = str
@@ -265,11 +265,11 @@ reEdit = (evt, oDiv) ->
     document.addEventListener('keydown', handleBodyKeyDown, false)
 
   # 編集をキャンセルした場合の処理
-  cancelButton = document.createElement 'INPUT'
+  cancelButton = document.createElement 'input'
   cancelButton.type = 'button'
   cancelButton.value = 'x'
   cancelButton.onclick = ->
-    xButton = document.createElement 'A'
+    xButton = document.createElement 'a'
     xButton.href = '#'
     xButton.innerHTML = '[x]'
     xButton.onclick = ->
@@ -277,7 +277,7 @@ reEdit = (evt, oDiv) ->
       return false
     oDiv.appendChild xButton
 
-    labelText = document.createElement 'SPAN'
+    labelText = document.createElement 'span'
     labelText.innerHTML = str
     oDiv.appendChild labelText
 
@@ -308,7 +308,7 @@ labelLoad = (data) ->
   newLabel.style.top = data.y + 'px'
   document.getElementsByClassName('slide')[data.slideno].appendChild(newLabel)
 
-  xButton = document.createElement 'A'
+  xButton = document.createElement 'a'
   xButton.href = '#'
   xButton.innerHTML = '[x]'
   xButton.onclick = ->
@@ -350,6 +350,7 @@ labelDelete = (id) ->
 labelSave = ->
   # ラベルのセーブ
 
+# すべてのラベルを表示します。
 showAll = ->
   labels = document.getElementsByClassName 'label'
   console.log labels
@@ -357,6 +358,7 @@ showAll = ->
     console.log label
     label.style.display=''
 
+# すべてのラベルを非表示にします。
 hideAll = ->
   labels = document.getElementsByClassName 'label'
   console.log labels.length

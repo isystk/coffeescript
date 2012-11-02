@@ -26,17 +26,17 @@ socket.on('counter', function(data) {
 socket.on('created', function(data) {
   var cancelButton, inputForm, inputText, newLabel, okButton, writeText;
   if (data.slideKey === getSlideId()) {
-    newLabel = document.createElement('DIV');
+    newLabel = document.createElement('div');
     newLabel.id = data.id;
     newLabel.className = 'label';
     newLabel.style.left = data.x + 'px';
     newLabel.style.top = data.y + 'px';
-    inputForm = document.createElement('FORM');
-    inputText = document.createElement('TEXTAREA');
+    inputForm = document.createElement('form');
+    inputText = document.createElement('textarea');
     inputText.style.cols = '10';
     inputText.style.rows = '3';
     inputForm.appendChild(inputText);
-    okButton = document.createElement('INPUT');
+    okButton = document.createElement('input');
     okButton.type = 'button';
     okButton.value = 'ok';
     okButton.onclick = function() {
@@ -45,7 +45,7 @@ socket.on('created', function(data) {
     inputForm.appendChild(okButton);
     writeText = function() {
       var htmlstr, labelText, str;
-      labelText = document.createElement('SPAN');
+      labelText = document.createElement('span');
       str = inputText.value;
       str = escapeHTML(str);
       htmlstr = str.replace(/(\n|\r)+/g, '<br />');
@@ -67,7 +67,7 @@ socket.on('created', function(data) {
       slidesClass.addEventListener('dblclick', addLabel, false);
       return document.addEventListener('keydown', handleBodyKeyDown, false);
     };
-    cancelButton = document.createElement('INPUT');
+    cancelButton = document.createElement('input');
     cancelButton.type = 'button';
     cancelButton.value = 'x';
     cancelButton.onclick = function() {
@@ -90,12 +90,12 @@ socket.on('created', function(data) {
 socket.on('created by other', function(data) {
   var labelText, newLabel;
   if (data.slideKey === getSlideId()) {
-    newLabel = document.createElement('DIV');
+    newLabel = document.createElement('div');
     newLabel.id = data.id;
     newLabel.className = 'label';
     newLabel.style.left = data.x + 'px';
     newLabel.style.top = data.y + 'px';
-    labelText = document.createElement('SPAN');
+    labelText = document.createElement('span');
     labelText.innerHTML = 'someone writing....';
     newLabel.appendChild(labelText);
     newLabel.onmousedown = function(evt) {
@@ -115,13 +115,13 @@ socket.on('text edited', function(data) {
   var label, labelText, xButton, xButtonLabel;
   if (data.slideKey === getSlideId()) {
     label = document.getElementById(data.id);
-    xButtonLabel = label.getElementsByTagName('A')[0];
-    labelText = label.getElementsByTagName('SPAN')[0];
+    xButtonLabel = label.getElementsByTagName('a')[0];
+    labelText = label.getElementsByTagName('span')[0];
     if (xButtonLabel) {
       label.removeChild(xButtonLabel);
     }
     label.removeChild(labelText);
-    xButton = document.createElement('A');
+    xButton = document.createElement('a');
     xButton.href = '#';
     xButton.innerHTML = '[x]';
     xButton.onclick = function() {
@@ -170,38 +170,38 @@ window.onload = function() {
 
 createOperationMenu = function() {
   var colorSelector, hideButton, nextButton, previousButton, redOption, showButton, yellowOption;
-  showButton = document.createElement('BUTTON');
+  showButton = document.createElement('button');
   showButton.type = 'button';
   showButton.innerHTML = 'show';
   showButton.onclick = function() {
     return showAll();
   };
-  hideButton = document.createElement('BUTTON');
+  hideButton = document.createElement('button');
   hideButton.type = 'button';
   hideButton.innerHTML = 'hide';
   hideButton.onclick = function() {
     return hideAll();
   };
-  previousButton = document.createElement('BUTTON');
+  previousButton = document.createElement('button');
   previousButton.type = 'button';
   previousButton.innerHTML = '< previous';
   previousButton.onclick = function() {
     return prevSlide();
   };
-  nextButton = document.createElement('BUTTON');
+  nextButton = document.createElement('button');
   nextButton.type = 'button';
   nextButton.innerHTML = 'next >';
   nextButton.onclick = function() {
     return nextSlide();
   };
-  colorSelector = document.createElement('SELECT');
-  yellowOption = document.createElement('OPTION');
+  colorSelector = document.createElement('select');
+  yellowOption = document.createElement('option');
   yellowOption.value = 'yellow';
   yellowOption.innerHTML = 'yellow';
   yellowOption.onselect = function() {
     return console.log('yellow');
   };
-  redOption = document.createElement('OPTION');
+  redOption = document.createElement('option');
   redOption.value = 'red';
   redOption.innerHTML = 'red';
   colorSelector.appendChild(yellowOption);
@@ -267,14 +267,14 @@ reEdit = function(evt, oDiv) {
   oDiv.onmousedown = function() {
     return {};
   };
-  inputForm = document.createElement('FORM');
-  inputText = document.createElement('TEXTAREA');
+  inputForm = document.createElement('form');
+  inputText = document.createElement('textarea');
   inputText.style.cols = '10';
   inputText.style.rows = '3';
   str = str.replace(/<br\b\/>|<br>/g, '\n');
   inputText.value = str;
   inputForm.appendChild(inputText);
-  okButton = document.createElement('INPUT');
+  okButton = document.createElement('input');
   okButton.type = 'button';
   okButton.value = 'ok';
   okButton.onclick = function() {
@@ -283,7 +283,7 @@ reEdit = function(evt, oDiv) {
   inputForm.appendChild(okButton);
   writeText = function() {
     var labelText;
-    labelText = document.createElement('SPAN');
+    labelText = document.createElement('span');
     str = inputText.value;
     str = str.replace(/(\n|\r)+/g, '<br />');
     labelText.innerHTML = str;
@@ -303,12 +303,12 @@ reEdit = function(evt, oDiv) {
     slidesClass.addEventListener('dblclick', addLabel, false);
     return document.addEventListener('keydown', handleBodyKeyDown, false);
   };
-  cancelButton = document.createElement('INPUT');
+  cancelButton = document.createElement('input');
   cancelButton.type = 'button';
   cancelButton.value = 'x';
   cancelButton.onclick = function() {
     var labelText, xButton;
-    xButton = document.createElement('A');
+    xButton = document.createElement('a');
     xButton.href = '#';
     xButton.innerHTML = '[x]';
     xButton.onclick = function() {
@@ -316,7 +316,7 @@ reEdit = function(evt, oDiv) {
       return false;
     };
     oDiv.appendChild(xButton);
-    labelText = document.createElement('SPAN');
+    labelText = document.createElement('span');
     labelText.innerHTML = str;
     oDiv.appendChild(labelText);
     oDiv.removeChild(inputForm);
@@ -343,7 +343,7 @@ labelLoad = function(data) {
   newLabel.style.left = data.x + 'px';
   newLabel.style.top = data.y + 'px';
   document.getElementsByClassName('slide')[data.slideno].appendChild(newLabel);
-  xButton = document.createElement('A');
+  xButton = document.createElement('a');
   xButton.href = '#';
   xButton.innerHTML = '[x]';
   xButton.onclick = function() {
