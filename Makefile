@@ -1,4 +1,4 @@
-all: install build
+all: install build run
 
 install:
 	npm install

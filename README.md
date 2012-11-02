@@ -4,7 +4,7 @@
 環境構築
 
 ・ビルドを実行する
-make all
+make install build
 
 ・サーバーを起動する
 make run
