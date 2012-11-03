@@ -15,12 +15,34 @@ div.presentation {
 	background: inherit;
 }
 
-div.operation {
+div.menu {
 	position: absolute;
 	top: 0px;
 	right: 0px;
 	width: 100%;
 	text-align: center;
+}
+
+div.page {
+	position: absolute;
+	top: 50%;
+	border: solid 5px #000;
+	background-color: #FFF;
+	padding: 20px;
+	height: 50px;
+	width: 50px;
+	text-align: center;
+	vertical-align: middle;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+}
+
+div.prev {
+	left: 30px;
+}
+
+div.next {
+	right: 30px;
 }
 
 div.counter {
@@ -95,7 +117,8 @@ div.slide p.small {
 
 section {
 	font-size: 50px;
-	color: #3f3f3f;
+	background-color: #000;
+	color: #FFF;
 	text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
 	margin: 100px 30px 0 30px;
 	overflow: hidden;

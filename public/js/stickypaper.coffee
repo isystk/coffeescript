@@ -1,7 +1,9 @@
 socket = io.connect()
 
 slidesClass = document.getElementsByClassName('slides')[0]
-operation = document.getElementsByClassName('operation')[0]
+menu = document.getElementsByClassName('menu')[0]
+prev = document.getElementsByClassName('prev')[0]
+next = document.getElementsByClassName('next')[0]
 
 socket.on 'loaded', (data) ->
   labelLoad data
@@ -20,6 +22,7 @@ socket.on 'created', (data) ->
     newLabel.className = 'label'
     newLabel.style.left = data.x + 'px'
     newLabel.style.top = data.y + 'px'
+
     # 入力フォームの用意
     inputForm = document.createElement 'form'
 
@@ -34,6 +37,7 @@ socket.on 'created', (data) ->
     okButton.onclick = ->
       writeText()
     inputForm.appendChild okButton
+
     # OKされたらテキストを表示し、フォームを消す
     writeText = ->
       labelText = document.createElement 'span'
@@ -130,67 +134,54 @@ window.onload = ->
   els = slides
   for el in els
     addClass el, 'slide'
-
   updateSlideClasses()
   slidesClass.addEventListener 'dblclick', addLabel, false
   createOperationMenu()
 
+# メニューを生成します。
 createOperationMenu = ->
+  # 表示ボタン
   showButton = document.createElement 'button'
   showButton.type = 'button'
-  showButton.innerHTML = 'show'
-  # hideButton.addEventListener 'click', hideAll, false
+  showButton.innerHTML = '表示'
   showButton.onclick = ->
     showAll()
 
+  # 非表示ボタン
   hideButton = document.createElement 'button'
   hideButton.type = 'button'
-  hideButton.innerHTML = 'hide'
-  # hideButton.addEventListener 'click', hideAll, false
+  hideButton.innerHTML = '非表示'
   hideButton.onclick = ->
     hideAll()
 
-  previousButton = document.createElement 'button'
-  previousButton.type = 'button'
-  previousButton.innerHTML = '< previous'
-  # hideButton.addEventListener 'click', hideAll, false
-  previousButton.onclick = ->
+  menu.appendChild showButton
+  menu.appendChild hideButton
+
+  # 前ページボタン
+  previousButton = document.createElement 'p'
+  previousButton.innerHTML = '<<'
+  prev.appendChild previousButton
+  prev.onclick = ->
     prevSlide()
 
-  nextButton = document.createElement 'button'
-  nextButton.type = 'button'
-  nextButton.innerHTML = 'next >'
-  # hideButton.addEventListener 'click', hideAll, false
-  nextButton.onclick = ->
+  # 次ページボタン
+  nextButton = document.createElement 'p'
+  nextButton.innerHTML = '>>'
+  next.appendChild nextButton
+  next.onclick = ->
     nextSlide()
-  colorSelector = document.createElement 'select'
-  yellowOption = document.createElement 'option'
-  yellowOption.value = 'yellow'
-  yellowOption.innerHTML = 'yellow'
-  yellowOption.onselect = ->
-    console.log 'yellow'
-  redOption = document.createElement 'option'
-  redOption.value = 'red'
-  redOption.innerHTML = 'red'
-  colorSelector.appendChild yellowOption
-  colorSelector.appendChild redOption
 
-  operation.appendChild showButton
-  operation.appendChild hideButton
-  operation.appendChild previousButton
-  operation.appendChild nextButton
-  # operation.appendChild colorSelector
 
+# 新しいラベルを追加します。
 addLabel = (event) ->
-  # 新しいラベルの追加
   slidesClass.removeEventListener 'dblclick', addLabel, false
   document.removeEventListener 'keydown', handleBodyKeyDown, false
   layerX = event.layerX
   layerY = event.layerY
   socket.json.emit 'create', {x: layerX, y: layerY, slideno: currentSlideNo-1}
 
+# ドラッグされるとラベルを移動する
 onDrag = (evt, item) ->
-  # ドラッグされるとラベルを移動する
   x = 0
   y = 0
 
@@ -202,38 +193,41 @@ onDrag = (evt, item) ->
   orgY = item.style.top
   orgY = Number(orgY.slice(0, -2))
 
-  slidesClass.addEventListener('mousemove', mousemove, false)
-  slidesClass.addEventListener('mouseup', mouseup, false)
+  slidesClass.addEventListener 'mousemove', mousemove, false
+  slidesClass.addEventListener 'mouseup', mouseup, false
 
   mousemove = (move) ->
     dx = move.screenX - x
     dy = move.screenY - y
     item.style.left = ( orgX + dx ) + 'px'
     item.style.top = ( orgY + dy ) + 'px'
-    socket.json.emit 'update', {id: item.id,x: orgX + dx, y: orgY + dy}
+    socket.json.emit 'update',
+      id: item.id
+      x: orgX + dx
+      y: orgY + dy
 
   mouseup = ->
     slidesClass.removeEventListener 'mousemove', mousemove, false
 
+# ダブルクリックで再編集
 reEdit = (evt, oDiv) ->
-  # ダブルクリックで再編集
   str = oDiv.lastChild.innerHTML
-  str = escapeHTML(str)
+  str = escapeHTML str
 
-  oDiv.removeChild(oDiv.firstChild)
-  oDiv.removeChild(oDiv.firstChild)
+  oDiv.removeChild oDiv.firstChild
+  oDiv.removeChild oDiv.firstChild
 
   oDiv.ondblclick = -> {}
-  slidesClass.removeEventListener('dblclick', addLabel, false)
+  slidesClass.removeEventListener 'dblclick', addLabel, false
   oDiv.onmousedown = -> {}
 
   # フォームを用意し、既に書いてあるテキストを代入
-  inputForm = document.createElement('form')
+  inputForm = document.createElement 'form'
 
-  inputText = document.createElement('textarea')
+  inputText = document.createElement 'textarea'
   inputText.style.cols = '10'
   inputText.style.rows = '3'
-  str = str.replace(/<br\b\/>|<br>/g, '\n')
+  str = str.replace /<br\b\/>|<br>/g, '\n'
   inputText.value = str
   inputForm.appendChild inputText
 
@@ -245,24 +239,26 @@ reEdit = (evt, oDiv) ->
 
   # OKされると内容を表示
   writeText = ->
-
-    labelText = document.createElement('span')
+    labelText = document.createElement 'span'
     str = inputText.value
-    str = str.replace(/(\n|\r)+/g, '<br />')
+    str = str.replace /(\n|\r)+/g, '<br />'
     labelText.innerHTML = str
-    oDiv.appendChild(labelText)
+    oDiv.appendChild labelText
 
-    oDiv.removeChild(inputForm)
-    socket.json.emit 'text edit', {id: oDiv.id, message: str}
+    oDiv.removeChild inputForm
+    socket.json.emit 'text edit'
+      id: oDiv.id
+      message: str
 
     oDiv.onmousedown = (evt) ->
       onDrag evt, this
+
     oDiv.ondblclick = (evt) ->
       reEdit evt,this
       return false
 
-    slidesClass.addEventListener('dblclick', addLabel, false)
-    document.addEventListener('keydown', handleBodyKeyDown, false)
+    slidesClass.addEventListener 'dblclick', addLabel, false
+    document.addEventListener 'keydown', handleBodyKeyDown, false
 
   # 編集をキャンセルした場合の処理
   cancelButton = document.createElement 'input'
@@ -291,6 +287,7 @@ reEdit = (evt, oDiv) ->
 
     slidesClass.addEventListener 'dblclick', addLabel, false
     document.addEventListener 'keydown', handleBodyKeyDown, false
+
   inputForm.appendChild cancelButton
 
   # 上記内容をAppend
@@ -298,8 +295,8 @@ reEdit = (evt, oDiv) ->
 
   inputText.focus()
 
+# ラベルをロードします。
 labelLoad = (data) ->
-  # ラベルのロード
   newLabel = document.createElement 'div'
 
   newLabel.className = 'label'
@@ -327,11 +324,11 @@ labelLoad = (data) ->
     reEdit evt, this
     return false
 
+# 現在表示されているページのスライドIDを取得します。
 getSlideId = ->
   url = location.href
-
   start = url.lastIndexOf('/')+1
-  end = url.indexOf('#')
+  end = url.indexOf '#'
   if start < end
     slideId = url.substring start, end
     console.log slideId
@@ -339,14 +336,16 @@ getSlideId = ->
   else
     return 'default'
 
+# 文字列をHTMLエスケープします。
 escapeHTML = (str) ->
   return str.replace(/&/g, '&amp').replace(/'/g, '&quot').replace(/</g, '&lt').replace(/>/g, '&gt')
 
-
+# ラベルを削除します。
 labelDelete = (id) ->
   socket.json.emit 'delete',
     id: id
 
+# ラベルを保存します。
 labelSave = ->
   # ラベルのセーブ
 

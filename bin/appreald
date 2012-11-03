@@ -1,0 +1,128 @@
+#!/bin/sh
+#
+# 起動シェル
+#
+
+[ "x`uname -s`" != "xLinux" ] && echo "Commands for Linux OS.\t[ NG ]" && exit 1
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+__node="/usr/local/node/bin/node"
+
+RETVAL=0
+ENV="real"
+NAME="coffeescript"
+APP_BIN=/usr/local/node/apps/${ENV}/${NAME}/server.js
+PIDFILE="/usr/local/node/pids/${ENV}/${NAME}.server.js.pid"
+LOGFILE="/usr/local/node/logs/${ENV}/${NAME}.log"
+OPTS="--"${ENV}
+
+start() {
+
+  if [ -f ${PIDFILE} ]; then
+      echo -n "Has already started."
+      failure $"${NAME} startup"
+      echo 
+      exit 1
+  fi
+
+  echo -n $"Starting ${NAME} daemon: "
+  sudo -u root ${__node} ${APP_BIN} ${OPTS} >>${LOGFILE} 2>&1 &
+  RETVAL=$?
+  [ ${RETVAL} -eq 0 ] && success $"${NAME} startup" || failure $"${NAME} startup"
+  echo
+}
+
+stop() {
+  ALL_RETVAL=0
+  echo -n $"Stopping ${NAME} daemon: "
+
+  if [ ! -f ${PIDFILE} ]; then
+    echo -n "The process has already come down."
+    failure $"${NAME}"
+    echo 
+    exit 1
+  fi
+
+  PID=`cat ${PIDFILE}`
+  kill ${PID}
+  RETVAL=$?
+  if [ ${RETVAL} -eq 0 ]; then
+    success $"${NAME} shutdown. pidfile=`basename ${PIDFILE}`"
+    rm -f "${PIDFILE}"
+  else
+    failure $"${NAME} shutdown. pidfile=`basename ${PIDFILE}`"
+  fi
+  echo 
+}
+
+forcestop() {
+  ALL_RETVAL=0
+  echo -n $"Force restart ${NAME} daemon: "
+
+  for pid in `ps ax | grep "server.js --${ENV}" | grep -v grep | awk '{print $1}'`
+  do
+    kill -9 ${pid}
+    RETVAL_PID=$?
+  done
+
+  rm -f "${PIDFILE}"
+  RETVAL_PIDFILE=$?
+  if [ ${RETVAL_PID} -eq 0 -a ${RETVAL_PIDFILE} ]; then
+    success $"${NAME}"
+  else
+    failure $"${NAME}"
+  fi
+
+  echo 
+}
+
+status() {
+  if [ -f ${PIDFILE} ]; then
+    PID=`cat ${PIDFILE}`
+    PS_STR=`ps aux | grep ${PID} | grep "app.js"`
+    if [ $? -eq 0 ]; then
+      echo "Is starting up."
+      echo ${PID}
+      exit 0
+    else 
+      echo "${NAME} pidfile exists only. path=${PIDFILE}"
+      exit 1
+    fi
+  else
+    echo "${NAME} is stopped."
+    return 0
+  fi
+}
+
+# See how we were called.
+case "$1" in
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	status)
+		status
+		RETVAL=$?
+		;;
+	restart)
+		stop
+    sleep 2
+		start
+		;;
+	forcestop)
+		forcestop
+		;;
+	forcerestart)
+		forcestop
+		sleep 2
+		start
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|status|restart|forcestop|forcestart}"
+		;;
+esac
+exit $RETVAL

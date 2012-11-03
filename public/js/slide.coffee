@@ -13,9 +13,9 @@ getCurrentSlide = ->
 currentSlideNo = getCurrentSlide()
 slides = document.getElementsByClassName('slide')
 
+# スペース区切りの文字列を配列に変換する
 spaces = /\s+/
 a1 = ['']
-
 str2array = (s) ->
   if typeof s == 'string' || s instanceof String
     if s.indexOf(' ') < 0
@@ -25,9 +25,11 @@ str2array = (s) ->
       return s.split spaces
   return s
 
+# スペースを除去する
 trim = (str) ->
   return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 
+# Class属性を追加する
 addClass = (node, classStr) ->
   classStr = str2array classStr
   cls = ' ' + node.className + ' '
@@ -36,6 +38,7 @@ addClass = (node, classStr) ->
       cls += c + ' '
   node.className = trim cls
 
+# Class属性を除去する
 removeClass = (node, classStr) ->
   cls
   if classStr != undefined
