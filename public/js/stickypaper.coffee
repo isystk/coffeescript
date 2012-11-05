@@ -2,8 +2,8 @@ socket = io.connect()
 
 slidesClass = document.getElementsByClassName('slides')[0]
 menu = document.getElementsByClassName('menu')[0]
-prev = document.getElementsByClassName('prev')[0]
-next = document.getElementsByClassName('next')[0]
+prevBtn = document.getElementsByClassName('prevBtn')[0]
+nextBtn = document.getElementsByClassName('nextBtn')[0]
 
 socket.on 'loaded', (data) ->
   labelLoad data
@@ -12,11 +12,11 @@ socket.on 'loaded', (data) ->
 socket.on 'counter', (data) ->
   counter = document.getElementsByClassName('counter')[0]
   slideId = getSlideId()
-  if slideId == data.slideId
+  if slideId is data.slideId
     counter.innerHTML = 'now reading : ' + data.count + ' people'
 
 socket.on 'created', (data) ->
-  if data.slideKey == getSlideId()
+  if data.slideKey is getSlideId()
     newLabel = document.createElement 'div'
     newLabel.id = data.id
     newLabel.className = 'label'
@@ -43,18 +43,20 @@ socket.on 'created', (data) ->
       labelText = document.createElement 'span'
       str = inputText.value
       str = escapeHTML str
-      htmlstr = str.replace(/(\n|\r)+/g, '<br />')
+      htmlstr = str.replace /(\n|\r)+/g, '<br />'
       labelText.innerHTML = htmlstr
       newLabel.appendChild labelText
 
       newLabel.removeChild inputForm
 
       console.log 'currentSlideNo:%d', currentSlideNo
-      socket.json.emit 'text edit', {id: newLabel.id, message: htmlstr}
+      socket.json.emit 'text edit',
+        id: newLabel.id
+        message: htmlstr
       newLabel.onmousedown = (evt) ->
-        onDrag evt, this
+        onDrag evt, @
       newLabel.ondblclick = (evt) ->
-        reEdit evt, this
+        reEdit evt, @
         return false
       slidesClass.addEventListener 'dblclick', addLabel, false
       document.addEventListener 'keydown', handleBodyKeyDown, false
@@ -65,19 +67,20 @@ socket.on 'created', (data) ->
     cancelButton.value = 'x'
     cancelButton.onclick = ->
       node = newLabel.parentNode
-      node.removeChild(newLabel)
-      socket.json.emit('cancel', {id: newLabel.id})
+      node.removeChild newLabel
+      socket.json.emit 'cancel',
+        id: newLabel.id
       slidesClass.addEventListener 'dblclick', addLabel, false
       document.addEventListener 'keydown', handleBodyKeyDown, false
 
     inputForm.appendChild cancelButton
     # 上記内容をAppend
     newLabel.appendChild inputForm
-    document.getElementsByClassName('slide')[data.slideno].appendChild(newLabel)
+    document.getElementsByClassName('slide')[data.slideno].appendChild newLabel
     inputText.focus()
 
 socket.on 'created by other', (data) ->
-  if data.slideKey == getSlideId()
+  if data.slideKey is getSlideId()
     newLabel = document.createElement 'div'
     newLabel.id = data.id
     newLabel.className = 'label'
@@ -85,19 +88,19 @@ socket.on 'created by other', (data) ->
     newLabel.style.top = data.y + 'px'
     labelText = document.createElement 'span'
     labelText.innerHTML = 'someone writing....'
-    newLabel.appendChild(labelText)
+    newLabel.appendChild labelText
     newLabel.onmousedown = (evt) ->
-      onDrag evt, this
+      onDrag evt, @
     newLabel.ondblclick = (evt) ->
-      reEdit evt, this
+      reEdit evt, @
       return false
   slidesClass.addEventListener 'dblclick', addLabel, false
   document.addEventListener 'keydown', handleBodyKeyDown, false
 
-  document.getElementsByClassName('slide')[data.slideno].appendChild(newLabel)
+  document.getElementsByClassName('slide')[data.slideno].appendChild newLabel
 
 socket.on 'text edited', (data) ->
-  if data.slideKey == getSlideId()
+  if data.slideKey is getSlideId()
     label = document.getElementById data.id
     xButtonLabel = label.getElementsByTagName('a')[0]
     labelText = label.getElementsByTagName('span')[0]
@@ -158,19 +161,14 @@ createOperationMenu = ->
   menu.appendChild hideButton
 
   # 前ページボタン
-  previousButton = document.createElement 'p'
-  previousButton.innerHTML = '<<'
-  prev.appendChild previousButton
-  prev.onclick = ->
+  prevBtn.onclick = (event) ->
+    event.preventDefault()
     prevSlide()
 
   # 次ページボタン
-  nextButton = document.createElement 'p'
-  nextButton.innerHTML = '>>'
-  next.appendChild nextButton
-  next.onclick = ->
+  nextBtn.onclick = (event) ->
+    event.preventDefault()
     nextSlide()
-
 
 # 新しいラベルを追加します。
 addLabel = (event) ->
@@ -178,7 +176,10 @@ addLabel = (event) ->
   document.removeEventListener 'keydown', handleBodyKeyDown, false
   layerX = event.layerX
   layerY = event.layerY
-  socket.json.emit 'create', {x: layerX, y: layerY, slideno: currentSlideNo-1}
+  socket.json.emit 'create',
+    x: layerX
+    y: layerY
+    slideno: currentSlideNo-1
 
 # ドラッグされるとラベルを移動する
 onDrag = (evt, item) ->
@@ -189,9 +190,9 @@ onDrag = (evt, item) ->
   y = evt.screenY
 
   orgX = item.style.left
-  orgX = Number(orgX.slice(0, -2))
+  orgX = Number orgX.slice(0, -2)
   orgY = item.style.top
-  orgY = Number(orgY.slice(0, -2))
+  orgY = Number orgY.slice(0, -2)
 
   slidesClass.addEventListener 'mousemove', mousemove, false
   slidesClass.addEventListener 'mouseup', mouseup, false
@@ -251,10 +252,10 @@ reEdit = (evt, oDiv) ->
       message: str
 
     oDiv.onmousedown = (evt) ->
-      onDrag evt, this
+      onDrag evt, @
 
     oDiv.ondblclick = (evt) ->
-      reEdit evt,this
+      reEdit evt,@
       return false
 
     slidesClass.addEventListener 'dblclick', addLabel, false
@@ -280,9 +281,9 @@ reEdit = (evt, oDiv) ->
     oDiv.removeChild inputForm
 
     oDiv.onmousedown = (evt) ->
-      onDrag evt, this
+      onDrag evt, @
     oDiv.ondblclick = (evt) ->
-      reEdit evt,this
+      reEdit evt,@
       return false
 
     slidesClass.addEventListener 'dblclick', addLabel, false
@@ -303,7 +304,7 @@ labelLoad = (data) ->
   newLabel.id = data._id
   newLabel.style.left = data.x + 'px'
   newLabel.style.top = data.y + 'px'
-  document.getElementsByClassName('slide')[data.slideno].appendChild(newLabel)
+  document.getElementsByClassName('slide')[data.slideno].appendChild newLabel
 
   xButton = document.createElement 'a'
   xButton.href = '#'
@@ -318,10 +319,10 @@ labelLoad = (data) ->
   newLabel.appendChild labelText
 
   newLabel.onmousedown = (evt) ->
-    onDrag evt, this
+    onDrag evt, @
 
   newLabel.ondblclick = (evt) ->
-    reEdit evt, this
+    reEdit evt, @
     return false
 
 # 現在表示されているページのスライドIDを取得します。

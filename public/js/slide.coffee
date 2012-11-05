@@ -11,13 +11,13 @@ getCurrentSlide = ->
     return 1
 
 currentSlideNo = getCurrentSlide()
-slides = document.getElementsByClassName('slide')
+slides = document.getElementsByClassName 'slide'
 
 # スペース区切りの文字列を配列に変換する
 spaces = /\s+/
 a1 = ['']
 str2array = (s) ->
-  if typeof s == 'string' || s instanceof String
+  if typeof s is 'string' or s instanceof String
     if s.indexOf(' ') < 0
       a1[0] = s
       return a1
@@ -34,22 +34,22 @@ addClass = (node, classStr) ->
   classStr = str2array classStr
   cls = ' ' + node.className + ' '
   for c in classStr
-    if c && cls.indexOf(' ' + c + ' ') < 0
+    if c and cls.indexOf ' ' + c + ' ' < 0
       cls += c + ' '
   node.className = trim cls
 
 # Class属性を除去する
 removeClass = (node, classStr) ->
   cls
-  if classStr != undefined
+  if classStr isnt undefined
     classStr = str2array classStr
     cls = ' ' + node.className + ' '
     for c in classStr
-      cls = cls.replace(' ' + c + ' ', ' ')
+      cls = cls.replace ' ' + c + ' ', ' '
     cls = trim cls
   else
     cls = ''
-  if node.className != cls
+  if node.className isnt cls
     node.className = cls
 
 getSlideEl = (slideNo) ->

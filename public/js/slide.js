@@ -44,7 +44,7 @@ addClass = function(node, classStr) {
   cls = ' ' + node.className + ' ';
   for (_i = 0, _len = classStr.length; _i < _len; _i++) {
     c = classStr[_i];
-    if (c && cls.indexOf(' ' + c + ' ') < 0) {
+    if (c && cls.indexOf(' ' + c + ' ' < 0)) {
       cls += c + ' ';
     }
   }

@@ -23,6 +23,10 @@ div.menu {
 	text-align: center;
 }
 
+div.menu button {
+	cursor: pointer;
+}
+
 div.page {
 	position: absolute;
 	top: 50%;

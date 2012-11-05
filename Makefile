@@ -12,5 +12,5 @@ MAIN_JS = ./server.js
 run:
 	node $(MAIN_JS)
 
-.PHONY: all build compile run
+.PHONY: all install build run
 
