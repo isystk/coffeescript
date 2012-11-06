@@ -81,7 +81,7 @@ forcestop() {
 status() {
   if [ -f ${PIDFILE} ]; then
     PID=`cat ${PIDFILE}`
-    PS_STR=`ps aux | grep ${PID} | grep "app.js"`
+    PS_STR=`ps aux | grep ${PID} | grep "server.js"`
     if [ $? -eq 0 ]; then
       echo "Is starting up."
       echo ${PID}
