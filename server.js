@@ -3,11 +3,9 @@
  Module dependencies.
 */
 
-var Comment, Schema, app, commentSchema, counter, express, io, mongoUri, mongoose, routes, slideKey, slideMap, socketIds;
+var Comment, Schema, app, commentSchema, counter, express, io, mongoUri, mongoose, slideKey, slideMap, socketIds;
 
 express = require('express');
-
-routes = require('./routes');
 
 io = require('socket.io');
 
@@ -40,7 +38,6 @@ app.configure(function() {
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(app.router);
   app.use(express["static"](__dirname + '/public'));
   return mongoose.connect(mongoUri);
 });
@@ -56,10 +53,6 @@ app.configure('development', function() {
 
 app.configure('production', function() {
   return app.use(express.errorHandler());
-});
-
-app.get('/favicon.ico', function(req, res) {
-  return res.render('favicon.ico', {});
 });
 
 app.get('/:id?', function(req, res) {

@@ -4,7 +4,6 @@
 ###
 
 express = require 'express'
-routes = require './routes'
 io = require 'socket.io'
 mongoose = require 'mongoose'
 
@@ -30,7 +29,6 @@ app.configure ->
   app.set 'view engine', 'jade'
   app.use express.bodyParser()
   app.use express.methodOverride()
-  app.use app.router
   app.use express.static  __dirname + '/public'
   mongoose.connect mongoUri
 
@@ -45,10 +43,6 @@ app.configure 'production', ->
   app.use express.errorHandler()
 
 # Routes
-
-app.get '/favicon.ico', (req, res) ->
-  res.render 'favicon.ico', {}
-
 app.get '/:id?', (req, res) ->
   console.log req.params.id
   if !req.params.id
